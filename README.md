@@ -1,6 +1,11 @@
 # MrByahe
 Transportation Terminal Tracker
 
+**Group 1**
+Kim Mathew Bautista
+[Kobe Andrew Capinpin](https://github.com/VinnRe)
+Francezca Ramos
+
 ## Planned Features
 - Sets How Many Buses Are Currently In The Terminal
 - Records if a passenger boards on a specific bus
