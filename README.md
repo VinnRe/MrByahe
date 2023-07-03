@@ -1,12 +1,11 @@
 # MrByahe
 Transportation Terminal Tracker
 
-<p style="text-align:center">
-<bold>Group 1</bold>
-Kim Mathew Bautista
-[Kobe Andrew Capinpin](https://github.com/VinnRe)
-Francezca Ramos
-</p>
+<p style="text-align:center"><strong>Group 1</strong></p>
+<p style="text-align:center">Kim Mathew Bautista</p>
+<p style="text-align:center"><strong><a href="https://github.com/VinnRe">Kobe Andrew Capinpin</a></strong></p>
+<p style="text-align:center">Francezca Ramos</p>
+
 
 ## Planned Features
 - Sets How Many Buses Are Currently In The Terminal
