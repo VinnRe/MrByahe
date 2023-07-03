@@ -1,17 +1,16 @@
-# MrByahe
-Transportation Terminal Tracker
+<div align="center">
+  <h1 align="center">Mr Byahe</h1>
 
-<div style="text-align: center;">
-  <strong>Group 1</strong>
-</div>
-<div style="text-align: center;">
-  <strong><a href=https://github.com/KimMathew>Kim Mathew Bautista</a></strong>
-</div>
-<div style="text-align: center;">
-  <strong><a href="https://github.com/VinnRe">Kobe Andrew Capinpin</a></strong>
-</div>
-<div style="text-align: center;">
-  Francezca Ramos
+  <h3 align="center">
+    Transportation Terminal Tracker
+  </h3>
+  <p align="center">
+    <b>CS-1303</b> <br>
+    <a href="https://github.com/KimMathew">Bautista, Kim Mathew</a> <br>
+    <a href="https://github.com/VinnRe">Capinpin, Kobe Andrew</a> <br>
+    <a href="">Ramos, Francezca</a> <br>
+  </p>
+  <br>
 </div>
 
 ## Planned Features
