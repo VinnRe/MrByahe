@@ -8,23 +8,26 @@
     <b>CS-1303</b> <br>
     <a href="https://github.com/KimMathew">Bautista, Kim Mathew</a> <br>
     <a href="https://github.com/VinnRe">Capinpin, Kobe Andrew</a> <br>
-    <a href="">Ramos, Francezca</a> <br>
+    <a href="https://github.com/mafranzramos">Ramos, Francezca</a> <br>
   </p>
   <br>
 </div>
 
 ## Planned Features
-- Sets How Many Buses Are Currently In The Terminal
+- Sets how many buses currently in the terminal
 - Records if a passenger boards on a specific bus
 - Records if a passenger disembark
 - Get the passenger count for a specific bus
 - Get total passengers in all bus
 - Get The Buses' Max Passengers
-- Add Buses 
+- Add Buses
 - Remove Bus if full and have already left
 - Add Bus Schedules
-- Color Coding: **Green** if not full, **Orange** if half-way full, and **Red** if full
+- Color Coding: Green if not full, Orange if half-way full, and Red if full
+- Display Terminal Map
+- Display Which buses are FULL, Half-Way, or Not Full
+- Display ETD (Expected Time of Departure) of busses
 
 ## Optional Features
-- Displays Terminal Map
-- Fares
+- Sorts Bus depending on which location they're going
+- Display Fares
