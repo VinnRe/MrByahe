@@ -1,6 +1,7 @@
+#define MAX_SIZE 32
 #include <iostream>
 #include <windows.h>
-#define MAX_SIZE 32
+#include <ctime>
 
 using namespace std;
 
@@ -11,6 +12,8 @@ public:
     string route;
     string departure;
     string busType;
+    string arrivalTime;
+    string departureTime;
     int passengerOnBoard;
     int fare;
 };
@@ -21,23 +24,33 @@ public:
 };
 
 // Function prototypes
-void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot);
-void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList);
-void displayBus(const Bus* bus);
-void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBuses);
-void history(Bus* historyList);
-void displayParkingLot(ParkingLot* parkingLot, int numParkingSlots);
-void specificBus(ParkingLot* parkingLot, int numParkingSlots);
-void displayAll(Bus* head, int numBus);
+// void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot);
+// void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList);
+// void displayBus(const Bus* bus);
+// void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBuses);
+// void history(Bus* historyList);
+// void displayParkingLot(ParkingLot* parkingLot, int numParkingSlots);
+// void specificBus(ParkingLot* parkingLot, int numParkingSlots);
+// void displayAll(Bus* head, int numBus);
 void mergeSort(Bus** headRef);
 Bus* merge(Bus* left, Bus* right);
 void split(Bus* source, Bus** frontRef, Bus** backRef);
-void mainDisplay();
-void freeMemory(Bus* head, Bus* historyList);
+// void mainDisplay();
+// void freeMemory(Bus* head, Bus* historyList);
 
-void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot) { //combination of add bus and insert node
+string getCurrentTime() { //to get the real time
+    time_t currentTime;
+    struct tm* localTime;
+    char timeBuffer[80];
+    time(&currentTime);
+    localTime = localtime(&currentTime);
+    strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", localTime);
+    return timeBuffer;
+}
+
+void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot){ //combination of add bus and insert node
     string name, route, departure, busType, busTypeChoice;
-    int fare;
+    int passengerSize, fare;
     cin.ignore(); // Clear the input buffer
 
     system("CLS");
@@ -52,24 +65,31 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot) { //combination
     int parkingNum;
     bool validParkingNum = false;
 
-    do {
+    do{
         cout << "Enter the parking number (1-8): ";
-        if (cin >> parkingNum && parkingNum >= 1 && parkingNum <= 8) {
-            if (parkingLot[parkingNum - 1].bus == NULL) {
+        while(!(cin >> parkingNum)){ //error-handler
+            cout << "\nInvalid Input!" << endl << endl;
+            cout << "Please input again: ";
+            cin.clear();
+            while(cin.get() != '\n');
+        }
+
+        if(parkingNum >= 1 && parkingNum <= 8){
+            if(parkingLot[parkingNum - 1].bus == NULL){
                 validParkingNum = true;
             }
-            else {
+            else{
                 cout << "\nParking Slot " << parkingNum << " is already occupied!" << endl;
                 Sleep(1000);
                 return;
             }
         }
-        else {
+        else{
             cout << "\nInvalid Parking Number! Please Try Again!" << endl << endl;
             cin.clear();
             cin.ignore();
         }
-    } while (!validParkingNum);
+    } while(!validParkingNum);
 
     cin.ignore();
 
@@ -80,25 +100,23 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot) { //combination
     getline(cin, newBus->name);
 
     bool choice = false;
-    do {
+    do{
         cout << "Bus Type [1] Regular [2] Air-conditioned: ";
         cin >> busTypeChoice;
 
-        if (busTypeChoice == "1") {
+        if(busTypeChoice == "1"){
             choice = true;
             newBus->busType = "Regular";
-        }
-        else if (busTypeChoice == "2") {
+        } else if(busTypeChoice == "2"){
             choice = true;
             newBus->busType = "Air-conditioned";
-        }
-        else {
+        } else{
             cout << "--------------------------------";
             cout << "\nInvalid Input! Please Try Again!" << endl;
             cin.clear();
             cin.ignore();
         }
-    } while (!choice);
+    } while(!choice);
     cin.ignore();
 
     cout << "Route: ";
@@ -107,28 +125,27 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot) { //combination
     cout << "Time of Departure: ";
     getline(cin, newBus->departure);
 
+    newBus->arrivalTime = getCurrentTime();
+
     bool validFare = false; //error-handler if user input in fare is not int
-    do {
+    do{
         cout << "Fare: ";
-        if (cin >> fare) {
+        if(cin >> fare){
             validFare = true;
             newBus->fare = fare;
-        }
-        else {
+        } else{
             cout << "--------------------------------";
             cout << "\nInvalid Input! Please Try Again!" << endl;
             cin.clear();
             cin.ignore();
         }
-    } while (!validFare);
+    } while(!validFare);
 
     newBus->next = NULL;
-    newBus->passengerOnBoard = 0;
 
     if (*head == nullptr) {
         *head = newBus;
-    }
-    else {
+    } else {
         Bus* current = *head;
         while (current->next != nullptr) {
             current = current->next;
@@ -145,17 +162,17 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot) { //combination
     Sleep(1000); //for time delay
 }
 
-void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList) {
+void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList){
     int parkingNum;
 
     system("CLS");
     cout << "---REMOVE BUS---" << endl;
     cout << "Enter the parking slot number (1-8) to remove the bus: ";
-    while (!(cin >> parkingNum)) { //error-handler
+    while(!(cin >> parkingNum)){ //error-handler
         cout << "\nInvalid Input!" << endl << endl;
         cout << "Please input again: ";
         cin.clear();
-        while (cin.get() != '\n');
+        while(cin.get() != '\n');
     }
 
     if (parkingNum >= 1 && parkingNum <= 8) {
@@ -163,7 +180,26 @@ void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** histor
             Bus* removedBus = parkingLot[parkingNum - 1].bus;
             parkingLot[parkingNum - 1].bus = NULL;
 
-            //Add the remove bus to the history
+            removedBus->departureTime = getCurrentTime();
+
+            // Remove the bus from the head list
+            Bus* current = *head;
+            Bus* prev = nullptr;
+
+            while (current != nullptr) {
+                if (current == removedBus) {
+                    if (prev == nullptr) {
+                        *head = current->next;
+                    } else {
+                        prev->next = current->next;
+                    }
+                    break;
+                }
+                prev = current;
+                current = current->next;
+            }
+
+            // Add the removed bus to the history
             removedBus->next = *historyList;
             *historyList = removedBus;
 
@@ -327,14 +363,14 @@ void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBu
     cin.get();
 }
 
-void history(Bus* historyList) {
+void history(Bus* historyList){ //displays the most removed bus, from newest to oldest
     system("CLS");
     cout << "Bus Departure History:" << endl;
 
     Bus* curr = historyList;
     int busNo = 1;
 
-    if (curr == NULL) {
+    if(curr == NULL){
         cout << "\nNo Bus Departure History available." << endl;
     }
     else {
@@ -342,8 +378,10 @@ void history(Bus* historyList) {
             cout << "\n------------------------" << endl;
             cout << "Bus No." << busNo << ": " << curr->name << endl;
             cout << "Route: " << curr->route << endl;
-            cout << "Departure Time: " << curr->departure << endl;
-            cout << "Fare: Php " << curr->fare;
+            cout << "Expected Departure Time: " << curr->departure << endl;
+            cout << "Fare: Php " << curr->fare << endl;
+            cout << "Time of Arrival: " << curr->arrivalTime << endl;
+            cout << "Time of Departure: " << curr->departureTime;
 
             curr = curr->next;
             busNo++;
@@ -382,8 +420,10 @@ void specificBus(ParkingLot* parkingLot, int numParkingSlots) { //display the sp
             cout << "\nRoute: " << parkingLot[parkingNum - 1].bus->route;
             cout << "\nBus Type: " << parkingLot[parkingNum - 1].bus->busType;
             cout << "\nDeparture Time: " << parkingLot[parkingNum - 1].bus->departure;
-            cout << "\nFare: Php " << parkingLot[parkingNum - 1].bus->fare << endl;
+            cout << "\nFare: Php " << parkingLot[parkingNum - 1].bus->fare;
             cout << "\nPassengers on Board: " << parkingLot[parkingNum - 1].bus->passengerOnBoard;
+            cout << "Time of Arrival: " << parkingLot[parkingNum - 1].bus->arrivalTime << endl;
+            cout << "Time of Departure: " << parkingLot[parkingNum - 1].bus->departureTime;
         }
         else {
             cout << "\nThere is no bus in parking slot " << parkingNum << "." << endl;
@@ -398,27 +438,42 @@ void specificBus(ParkingLot* parkingLot, int numParkingSlots) { //display the sp
     cin.get();
 }
 
-void displayAll(Bus* head, int numBus) {
+void displayAll(Bus* head, Bus* historyList) {
+    system("CLS");
+    cout << "Buses Information:" << endl;
+
     Bus* curr = head;
     int busNo = 1;
+    bool busesDisplayed = false; // Flag to track if any non-removed buses were displayed
 
-    system("CLS");
+    while (curr != NULL) {
+        bool busRemoved = false;
+        Bus* historyCurr = historyList;
 
-    if (head == NULL) { //display if the list is empty
-        cout << "There is no bus to display." << endl;
-        Sleep(1000);
-        return;
+        while (historyCurr != NULL) {
+            if (historyCurr == curr) {
+                busRemoved = true;
+                break;
+            }
+            historyCurr = historyCurr->next;
+        }
+
+        if (!busRemoved) {
+            cout << "\nBus No." << busNo << ": " << curr->name;
+            cout << "\nBus Type: " << curr->busType;
+            cout << "\nRoute: " << curr->route;
+            cout << "\nExpected Departure Time: " << curr->departure;
+            cout << "\nFare: Php " << curr->fare;
+            cout << "\nTime of Arrival: " << curr->arrivalTime << endl;
+
+            busNo++;
+            busesDisplayed = true;
+        }
+        curr = curr->next;
     }
 
-    while (curr != NULL) { //display until the lastnode
-        cout << "\nBus No." << busNo << ": " << curr->name;
-        cout << "\nBus Type: " << curr->busType;
-        cout << "\nRoute: " << curr->route;
-        cout << "\nDeparture Time: " << curr->departure;
-        cout << "\nFare: Php " << curr->fare << endl;
-        cout << "\nPassengers on Board: " << curr->passengerOnBoard;
-        curr = curr->next;
-        busNo++;
+    if (!busesDisplayed) {
+        cout << "\nThere are no buses to display." << endl;
     }
 
     cout << "\nPress any key to go back: ";
@@ -579,7 +634,7 @@ int main()
             specificBus(parkingLot, numParkingSlots);
         }
         else if (choice == "4") {
-            displayAll(head, totalBuses);
+            displayAll(head, historyList);
         }
         else if (choice == "5") {
             editBus(head, parkingLot, numParkingSlots, totalBuses);
