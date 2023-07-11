@@ -1,0 +1,49 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+const string ANSI_GREEN = "\033[1;32m";
+const string ANSI_YELLOW = "\033[1;33m"; // sorry wala akong makitang ANSI na orange. 
+const string ANSI_RED = "\033[1;31m";
+const string ANSI_RESET = "\033[0m";
+
+int main() {
+
+    cout << "\t\t*==========================================================================================*" << endl;
+    cout << "\t\t||                                        MR. BYAHE                                       ||" << endl;
+    cout << "\t\t||                                 Your Transportation Companion                          ||" << endl;
+    cout << "\t\t*==========================================================================================*" << endl;
+    cout << endl;
+
+    cout << "+--------------------+--------------------+--------------------+--------------------+         +----------------------------+" << endl;
+    cout << "|                    |                    |                    |                    |         |       Time Schedule:       |" << endl;
+    cout << "|                    |                    |                    |                    |         |   +--------------------+   |" << endl;
+    cout << "|    Parking No.1    |   Parking No. 2    |   Parking No. 3    |   Parking No. 4    |         |   |                    |   |" << endl;
+    cout << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(10) << "|" << setw(4) << "|" << setw(10) << "Time" << setw(11) << "|" << setw(4) << "|" << endl;
+    cout << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(10) << "|" << setw(4) << "|" << setw(21) << "|" << setw(4) << "|" << endl;
+    cout << "|                    |                    |                    |                    |         |   |                    |   |" << endl;
+    cout << "|                    |                    |                    |                    |         |   +--------------------+   |" << endl;
+    cout << "|                    |                    |                    |                    |         +----------------------------+" << endl;
+    cout << "+--------------------+--------------------+--------------------+--------------------+         +                            +" << endl;
+    cout << "|                                                                                   |         +----------------------------+" << endl;
+    cout << "|                                                                                   |         |          Capacity:         |" << endl;
+    cout << "+--------------------+--------------------+--------------------+--------------------+         |   +---------------------+  |" << endl;
+    cout << "|                    |                    |                    |                    |         |   |        " << ANSI_GREEN << "Green" << ANSI_RESET << "        |  |" << endl;
+    cout << "|                    |                    |                    |                    |         |   +---------------------+  |" << endl;
+    cout << "|   Parking No. 5    |   Parking No. 6    |    Parking No. 7   |   Parking No. 8    |         |   +---------------------+  |" << endl;
+    cout << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(14) << "Bus Name" << setw(7) << "|" << setw(10) << "|" << setw(4) << "|" << setw(14) << ANSI_YELLOW << "Yellow" << ANSI_RESET << setw(9) << "|" << setw(3) << "|" << endl;
+    cout << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(13) << "Route" << setw(8) << "|" << setw(39) << "|   +---------------------+  |" << endl;
+    cout << "|                    |                    |                    |                    |         |   +---------------------+  |" << endl;
+    cout << "|                    |                    |                    |                    |         |   |         " << ANSI_RED << "Red" << ANSI_RESET << "         |  |" << endl;
+    cout << "|                    |                    |                    |                    |         |   +---------------------+  |" << endl;
+    cout << "+--------------------+--------------------+--------------------+--------------------+         +----------------------------+" << endl;
+
+    cout << "*===========================================================================================================================*" << endl;
+    cout << "||                                                MENU                                                                     ||" << endl;
+    cout << "||   [1] Add Bus ||    [2] Remove Bus   ||  [3]  Display Specific Bus Information  ||   [4] Display All Buses Information  ||" << endl;
+    cout << "||  [5] Edit Bus Information        ||    [6] Sort Bus By Passenger Count     ||         [7] History  ||        [8] Exit   ||" << endl;
+    cout << "||                                        Enter your choice: [     ]                                                       ||" << endl;
+    cout << "*===========================================================================================================================*" << endl;
+
+    return 0;
+}
