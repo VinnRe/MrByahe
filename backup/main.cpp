@@ -24,19 +24,9 @@ public:
 };
 
 // Function prototypes
-// void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot);
-// void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList);
-// void displayBus(const Bus* bus);
-// void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBuses);
-// void history(Bus* historyList);
-// void displayParkingLot(ParkingLot* parkingLot, int numParkingSlots);
-// void specificBus(ParkingLot* parkingLot, int numParkingSlots);
-// void displayAll(Bus* head, int numBus);
 void mergeSort(Bus** headRef);
 Bus* merge(Bus* left, Bus* right);
 void split(Bus* source, Bus** frontRef, Bus** backRef);
-// void mainDisplay();
-// void freeMemory(Bus* head, Bus* historyList);
 
 string getCurrentTime() { //to get the real time
     time_t currentTime;
@@ -48,13 +38,35 @@ string getCurrentTime() { //to get the real time
     return timeBuffer;
 }
 
+void addBusText(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+
+    cout << "\t\t\t\t                    _      _    ____              \n"
+            "\t\t\t\t         /\\        | |    | |  |  _ \\             \n"
+            "\t\t\t\t        /  \\     __| |  __| |  | |_) | _   _  ___ \n"
+            "\t\t\t\t       / /\\ \\   / _` | / _` |  |  _ < | | | |/ __|\n"
+            "\t\t\t\t      / ____ \\ | (_| || (_| |  | |_) || |_| |\\__ \\\n"
+            "\t\t\t\t     /_/    \\_\\ \\__,_| \\__,_|  |____/  \\__,_||___/\n";
+
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot){ //combination of add bus and insert node
     string name, route, departure, busType, busTypeChoice;
     int passengerSize, fare;
     cin.ignore(); // Clear the input buffer
 
     system("CLS");
-    cout << "---ADD BUS---" << endl;
+    addBusText();
+    cout << "\t===============================================================================================" << endl;
 
     if (totalBuses >= 8) { //if the maximum bus is reached
         cout << "\nMaximum number of buses reached. Cannot add more buses." << endl;
@@ -162,11 +174,33 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot){ //combination 
     Sleep(1000); //for time delay
 }
 
+void removeBusText(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+
+    cout << "\t\t      _____                                          ____              \n"
+            "\t\t     |  __ \\                                        |  _ \\             \n"
+            "\t\t     | |__) |  ___  _ __ ___    ___  __   __  ___   | |_) | _   _  ___ \n"
+            "\t\t     |  _  /  / _ \\| '_ ` _ \\  / _ \\ \\ \\ / /  / _ \\ |  _ < | | | |/ __|\n"
+            "\t\t     | | \\ \\ |  __/| | | | | || (_) | \\ V / |   __/ | |_) || |_| |\\__ \\\n"
+            "\t\t     |_|  \\_\\ \\___||_| |_| |_| \\___/   \\_/    \\___| |____/  \\__,_||___/\n";
+
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList){
     int parkingNum;
 
     system("CLS");
-    cout << "---REMOVE BUS---" << endl;
+    removeBusText();
+    cout << "\t===============================================================================================" << endl;
     cout << "Enter the parking slot number (1-8) to remove the bus: ";
     while(!(cin >> parkingNum)){ //error-handler
         cout << "\nInvalid Input!" << endl << endl;
@@ -227,6 +261,24 @@ void displayBus(const Bus* bus) { //will be used in the edit bus
     cout << "\nPassengers on Board: " << bus->passengerOnBoard;
     cout << "\nFare: Php " << bus->fare << endl;
 }
+void editBusText() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+    cout << "\t\t\t\t ______      _  _  _     ____              \n"
+            "\t\t\t\t|  ____|    | |(_)| |   |  _ \\             \n"
+            "\t\t\t\t| |__     __| | _ | |_  | |_) | _   _  ___ \n"
+            "\t\t\t\t|  __|   / _` || || __| |  _ < | | | |/ __|\n"
+            "\t\t\t\t| |____ | (_| || || |_  | |_) || |_| |\\__ \\\n"
+            "\t\t\t\t|______| \\__,_||_| \\__| |____/  \\__,_||___/\n";
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
 
 void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBuses) { //allows the user to edit
     string busTypeChoice;
@@ -236,7 +288,8 @@ void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBu
     int temp = 0;
 
     system("CLS");
-
+    editBusText();
+    cout << "\t===============================================================================================" << endl;
     if (head == NULL) { //display if the list is empty
         cout << "There is no bus to edit." << endl;
         Sleep(1000);
@@ -316,7 +369,12 @@ void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBu
                     break;
                 case 5:
                     cout << "Add how many passengers on board: ";
-                    cin >> temp;
+                    while(!(cin >> temp)){ //error-handler
+                        cout << "\nInvalid Input!" << endl << endl;
+                        cout << "Please input again: ";
+                        cin.clear();
+                        while(cin.get() != '\n');
+                    }
                     if (temp > 0 && (busToEdit->passengerOnBoard + temp) <= MAX_SIZE) {
                     busToEdit->passengerOnBoard += temp;
                     cout << "Added " << temp << " passengers on board" << endl;
@@ -363,8 +421,31 @@ void editBus(Bus* head, ParkingLot* parkingLot, int numParkingSlots, int totalBu
     cin.get();
 }
 
+void historyText() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    cout << "\t\t\t\t ____                _    _  _       _                       \n"
+            "\t\t\t\t|  _ \\              | |  | |(_)     | |                      \n"
+            "\t\t\t\t| |_) | _   _  ___  | |__| | _  ___ | |_   ___   _ __  _   _ \n"
+            "\t\t\t\t|  _ < | | | |/ __| |  __  || |/ __|| __| / _ \\ | '__|| | | |\n"
+            "\t\t\t\t| |_) || |_| |\\__ \\ | |  | || |\\__ \\| |_ | (_) || |   | |_| |\n"
+            "\t\t\t\t|____/  \\__,_||___/ |_|  |_||_||___/ \\__| \\___/ |_|    \\__, |\n"
+            "\t\t\t\t                                                        __/ |\n"
+            "\t\t\t\t                                                       |___/  \n";
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 void history(Bus* historyList){ //displays the most removed bus, from newest to oldest
     system("CLS");
+    historyText();
+    cout << "\t===============================================================================================" << endl;
     cout << "Bus Departure History:" << endl;
 
     Bus* curr = historyList;
@@ -394,25 +475,39 @@ void history(Bus* historyList){ //displays the most removed bus, from newest to 
     cin.get();
 }
 
-void displayParkingLot(ParkingLot* parkingLot, int numParkingSlots) { //sample display
-    system("CLS");
-    cout << "Terminal Map:\n"; //for simulation only
-    for (int i = 0; i < numParkingSlots; i++) {
-        cout << "\nParking Slot " << i + 1 << ": ";
-        if (parkingLot[i].bus != NULL) {
-            cout << "Bus Name: " << parkingLot[i].bus->name << " | Route: " << parkingLot[i].bus->route << endl;
-        }
-        else {
-            cout << " " << endl;
-        }
-    }
+void specificBusText(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    cout << "\t      _____                     _   __  _         ____                _____          __        " << endl;
+    cout << "\t     / ____|                   (_) / _|(_)       |  _ \\              |_   _|        / _|       " << endl;
+    cout << "\t    | (___   _ __    ___   ___  _ | |_  _   ___  | |_) | _   _  ___    | |   _ __  | |_   ___  " << endl;
+    cout << "\t     \\___ \\ | '_ \\  / _ \\ / __|| ||  _|| | / __| |  _ < | | | |/ __|   | |  | '_ \\ |  _| / _ \\ " << endl;
+    cout << "\t     ____) || |_) ||  __/| (__ | || |  | || (__  | |_) || |_| |\\__ \\  _| |_ | | | || |  | (_) |" << endl;
+    cout << "\t    |_____/ | .__/  \\___| \\___||_||_|  |_| \\___| |____/  \\__,_||___/ |_____||_| |_||_|   \\___/ " << endl;
+    cout << "\t            | |                                                                                " << endl;
+    cout << "\t            |_|                                                                                " << endl;
+    SetConsoleTextAttribute(hConsole, currentColor);
 }
 
 void specificBus(ParkingLot* parkingLot, int numParkingSlots) { //display the specified bus
     system("CLS");
-    cout << "Enter the parking slot number (1-8): ";
+    specificBusText();
+    cout << "\t===================================================================================================" << endl;
     int parkingNum;
-    cin >> parkingNum;
+    cout << "Enter the parking slot number (1-8) to edit a bus: ";
+    while(!(cin >> parkingNum)){ //error-handler
+        cout << "\nInvalid Input!" << endl << endl;
+        cout << "Please input again: ";
+        cin.clear();
+        while(cin.get() != '\n');
+    }
 
     if (parkingNum >= 1 && parkingNum <= numParkingSlots) {
         if (parkingLot[parkingNum - 1].bus != NULL) {
@@ -422,8 +517,8 @@ void specificBus(ParkingLot* parkingLot, int numParkingSlots) { //display the sp
             cout << "\nDeparture Time: " << parkingLot[parkingNum - 1].bus->departure;
             cout << "\nFare: Php " << parkingLot[parkingNum - 1].bus->fare;
             cout << "\nPassengers on Board: " << parkingLot[parkingNum - 1].bus->passengerOnBoard;
-            cout << "Time of Arrival: " << parkingLot[parkingNum - 1].bus->arrivalTime << endl;
-            cout << "Time of Departure: " << parkingLot[parkingNum - 1].bus->departureTime;
+            cout << "\nTime of Arrival: " << parkingLot[parkingNum - 1].bus->arrivalTime;
+            cout << "\nTime of Departure: " << parkingLot[parkingNum - 1].bus->departureTime;
         }
         else {
             cout << "\nThere is no bus in parking slot " << parkingNum << "." << endl;
@@ -438,9 +533,30 @@ void specificBus(ParkingLot* parkingLot, int numParkingSlots) { //display the sp
     cin.get();
 }
 
+void displayAllText() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    cout << "\t\t\t           _  _   ____                _____          __        " << endl;
+    cout << "\t\t\t    /\\    | || | |  _ \\              |_   _|        / _|       " << endl;
+    cout << "\t\t\t   /  \\   | || | | |_) | _   _  ___    | |   _ __  | |_   ___  " << endl;
+    cout << "\t\t\t  / /\\ \\  | || | |  _ < | | | |/ __|   | |  | '_ \\ |  _| / _ \\ " << endl;
+    cout << "\t\t\t / ____ \\ | || | | |_) || |_| |\\__ \\  _| |_ | | | || |  | (_) |" << endl;
+    cout << "\t\t\t/_/    \\_\\|_||_| |____/  \\__,_||___/ |_____||_| |_||_|   \\___/ " << endl;
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 void displayAll(Bus* head, Bus* historyList) {
     system("CLS");
-    cout << "Buses Information:" << endl;
+    displayAllText();
+    cout << "\t===============================================================================================" << endl;
+    cout << "\tBuses Information:" << endl;
 
     Bus* curr = head;
     int busNo = 1;
@@ -546,8 +662,29 @@ void split(Bus* source, Bus** frontRef, Bus** backRef) {
     slow->next = NULL;
 }
 
+void displaySortedBusesText() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    cout << "\t\t\t\t  _____               _     ____              \n"
+            "\t\t\t\t / ____|             | |   |  _ \\             \n"
+            "\t\t\t\t| (___    ___   _ __ | |_  | |_) | _   _  ___ \n"
+            "\t\t\t\t \\___ \\  / _ \\ | '__|| __| |  _ < | | | |/ __|\n"
+            "\t\t\t\t ____) || (_) || |   | |_  | |_) || |_| |\\__ \\\n"
+            "\t\t\t\t|_____/  \\___/ |_|    \\__| |____/  \\__,_||___/\n";
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 void displaySortedBuses(Bus* head) {
     system("CLS");
+    displaySortedBusesText();
+    cout << "\t===============================================================================================" << endl;
     cout << "Sorted Buses by Passenger Count:" << endl;
 
     Bus* curr = head;
@@ -561,9 +698,11 @@ void displaySortedBuses(Bus* head) {
             cout << "\n------------------------" << endl;
             cout << "Bus No." << busNo << ": " << curr->name << endl;
             cout << "Route: " << curr->route << endl;
-            cout << "Departure Time: " << curr->departure << endl;
+            cout << "Estimated Departure Time: " << curr->departure << endl;
             cout << "Fare: Php " << curr->fare << endl;
             cout << "Passengers on Board: " << curr->passengerOnBoard << endl;
+            cout << "Arrival Time: " << curr->arrivalTime << endl;
+            cout << "Departure Time: " << curr->departureTime << endl;
 
             curr = curr->next;
             busNo++;
@@ -573,10 +712,6 @@ void displaySortedBuses(Bus* head) {
     cout << "\nPress any key to go back: ";
     cin.ignore();
     cin.get();
-}
-
-void mainDisplay() {
-    cout << "";
 }
 
 void freeMemory(Bus* head, Bus* historyList) { //to prevent memory leaks
@@ -593,12 +728,31 @@ void freeMemory(Bus* head, Bus* historyList) { //to prevent memory leaks
     }
 }
 
+void logoHeader(){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // Get the current console color
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD currentColor = consoleInfo.wAttributes;
+    // Set color to blue
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    cout << "\t\t __  __            ____                 _           \n"
+                 "\t\t|  \\/  |          |  _ \\               | |          \n"
+                 "\t\t| \\  / | _ __     | |_) | _   _   __ _ | |__    ___ \n"
+                 "\t\t| |\\/| || '__|    |  _ < | | | | / _` || '_ \\  / _ \\\n"
+                 "\t\t| |  | || |    _  | |_) || |_| || (_| || | | ||  __/\n"
+                 "\t\t|_|  |_||_|   (_) |____/  \\__, | \\__,_||_| |_| \\___|\n"
+                 "\t\t                           __/ |                    \n"
+                 "\t\t                          |___/                     \n";
+    SetConsoleTextAttribute(hConsole, currentColor);
+}
+
 int main()
 {
     const int numParkingSlots = 8; //number of parking slots
     Bus* head = NULL; //linked list for add bus
     int totalBuses = 0;
-    string choice;
+    int choice;
     ParkingLot parkingLot[numParkingSlots]; //array of parking slots
     Bus* historyList = NULL; //linked list for history
 
@@ -609,51 +763,52 @@ int main()
     bool isMain = true;
     while (isMain) {
         system("CLS");
+        logoHeader();
 
-        displayParkingLot(parkingLot, numParkingSlots); //simulation for specific display
-
-        //choices for simulation only
-        cout << "\n[1] Add Bus";
-        cout << "\n[2] Remove Bus";
-        cout << "\n[3] Display Specific Bus Information"; //optional
-        cout << "\n[4] Display All Buses Information"; //simulation for display all
-        cout << "\n[5] Edit Bus Information";
-        cout << "\n[6] Sort Buses by Passenger Count";
-        cout << "\n[7] History";
-        cout << "\n[8] Exit";
-        cout << "\nYour Choice: ";
+        cout << "\t====================================================================\n";
+        cout << "\t[1] Add Bus\n";
+        cout << "\t[2] Remove Bus\n";
+        cout << "\t[3] Display Specific Bus Information\n"; //optional
+        cout << "\t[4] Display All Buses Information\n"; //simulation for display all
+        cout << "\t[5] Edit Bus Information\n";
+        cout << "\t[6] Sort Buses by Passenger Count\n";
+        cout << "\t[7] History\n";
+        cout << "\t[8] Exit\n";
+        cout << "\tYour Choice: ";
         cin >> choice;
 
-        if (choice == "1") {
-            addBus(&head, totalBuses, parkingLot);
-        }
-        else if (choice == "2") {
-            removeBus(&head, totalBuses, parkingLot, &historyList);
-        }
-        else if (choice == "3") {
-            specificBus(parkingLot, numParkingSlots);
-        }
-        else if (choice == "4") {
-            displayAll(head, historyList);
-        }
-        else if (choice == "5") {
-            editBus(head, parkingLot, numParkingSlots, totalBuses);
-        }
-        else if (choice == "6") {
-            mergeSort(&head);
-            cout << "\nBuses sorted by Passenger Count!" << endl;
-            Sleep(1000);
-            displaySortedBuses(head); // Display the sorted buses
-        }
-        else if (choice == "7") {
-            history(historyList);
-        }
-        else if (choice == "8") {
-            isMain = false;
-        }
-        else {
-            cout << "\nInvalid Input! Please Try Again!";
-            Sleep(1000);
+        switch(choice) {
+            case 1:
+                addBus(&head, totalBuses, parkingLot);
+                break;
+            case 2:
+                removeBus(&head, totalBuses, parkingLot, &historyList);
+                break;
+            case 3:
+                specificBus(parkingLot, numParkingSlots);
+                break;
+            case 4:
+                displayAll(head, historyList);
+                break;
+            case 5:
+                editBus(head, parkingLot, numParkingSlots, totalBuses);
+                break;
+            case 6:
+                mergeSort(&head);
+                cout << "\nBuses sorted by Passenger Count!" << endl;
+                Sleep(1000);
+                displaySortedBuses(head); // Display the sorted buses
+                break;
+            case 7:
+                history(historyList);
+                break;
+            case 8:
+                isMain = false;
+                break;
+            default:
+                cout << "\nInvalid Input! Please Try Again!";
+                Sleep(1000);
+                break;
         }
     }
 
