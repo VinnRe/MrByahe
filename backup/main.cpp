@@ -2,6 +2,7 @@
 #include <iostream>
 #include <windows.h>
 #include <ctime>
+#include <bits/stdc++.h> // for setprecision
 
 using namespace std;
 
@@ -62,6 +63,8 @@ void addBusText(){
 void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot){ //combination of add bus and insert node
     string name, route, departure, busType, busTypeChoice;
     int passengerSize, fare;
+    clock_t start, end;
+    start = clock();
     cin.ignore(); // Clear the input buffer
 
     system("CLS");
@@ -166,11 +169,15 @@ void addBus(Bus** head, int& totalBuses, ParkingLot* parkingLot){ //combination 
     }
 
     parkingLot[parkingNum - 1].bus = newBus;
-    cout << "\nBus was successfully added to Parking Slot " << parkingNum << "!";
-
+    cout << "\nBus was successfully added to Parking Slot " << parkingNum << "!" << endl;
+    end = clock();
+    double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+    cout << "Execution time: " << fixed << time_taken << setprecision(5);
+    cout << " sec " << endl;
     totalBuses++;
+    cout << "\nPress any key to go back: ";
     cin.ignore();
-    cout << endl;
+    cin.get();
     Sleep(1000); //for time delay
 }
 
