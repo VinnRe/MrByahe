@@ -287,6 +287,7 @@ public:
         cout << "\t\t\t\t                 | |                                          " << endl;
         cout << "\t\t\t\t                 |_|                                          " << endl;
         SetConsoleTextAttribute(hConsole, currentColor);
+        
         cout << "\n\t\t\t  ====================================================================\n";
     }
 
