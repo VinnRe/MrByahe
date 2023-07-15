@@ -4,6 +4,7 @@
 #include <ctime>
 #include <chrono> // To get the execution time and it is more modern and robust time measurement functionality
 #include <iomanip>
+//#include <thread>
 
 using namespace std;
 
@@ -267,6 +268,43 @@ public:
         cin.get();
     }
 
+    void departBusDisplay() {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        // Get the current console color
+        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+        WORD currentColor = consoleInfo.wAttributes;
+
+        // Set color to blue
+        SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+        cout << "\t\t\t\t    _____                             _     ____              " << endl;
+        cout << "\t\t\t\t   |  __ \\                           | |   |  _ \\             " << endl;
+        cout << "\t\t\t\t   | |  | |  ___  _ __    __ _  _ __ | |_  | |_) | _   _  ___ " << endl;
+        cout << "\t\t\t\t   | |  | | / _ \\| '_ \\  / _` || '__|| __| |  _ < | | | |/ __|" << endl;
+        cout << "\t\t\t\t   | |__| ||  __/| |_) || (_| || |   | |_  | |_) || |_| |\\__ \\" << endl;
+        cout << "\t\t\t\t   |_____/  \\___|| .__/  \\__,_||_|    \\__| |____/  \\__,_||___/" << endl;
+        cout << "\t\t\t\t                 | |                                          " << endl;
+        cout << "\t\t\t\t                 |_|                                          " << endl;
+        SetConsoleTextAttribute(hConsole, currentColor);
+        cout << "\n\t\t\t  ====================================================================\n";
+    }
+
+    void mainTerminal::departBus(int parkingNum) {
+        auto startTime = std::chrono::steady_clock::now();
+        system("CLS");
+        departBusDisplay();
+
+        // CODE
+
+        auto endTime = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        cout << "\t\t\tExecution Time: " << duration.count() << " ms" << endl;
+        cout << "\n\t\t\tPress any key to go back: ";
+        cin.ignore();
+        cin.get();
+    }
+    
     void displayBus(const Bus* bus) { //will be used in the edit bus
         cout << "\t\t\t  Bus Name: " << bus->name;
         cout << "\n\t\t\t  Bus Type: " << bus->busType;
@@ -324,10 +362,6 @@ public:
         int parkingNum;
         cout << "\t\t\t  Enter the parking slot number you want to edit (1-8): ";
         while (!(cin >> parkingNum)) { //error-handler
-            system("cls");
-            editBusText();
-            cout << "\t\t\t  Enter the parking slot number you want to edit (1-8): ";
-            cout << "\n\n\t\t\t  Your Choice: ";
             cout << "\n\t\t\t  Invalid Input!" << endl << endl;
             cout << "\t\t\t  Please input again: ";
             cin.clear();
@@ -337,61 +371,68 @@ public:
         if (parkingNum >= 1 && parkingNum <= numParkingSlots) {
             Bus* busToEdit = parkingLot[parkingNum - 1].bus; //find the bus
             if (busToEdit != NULL) {
-                cout << "\n\t\t\t  Select the detail you want to edit:";
-                cout << "\n\t\t\t  [1] Route";
-                cout << "\n\t\t\t  [2] Bus Type";
-                cout << "\n\t\t\t  [3] Departure Time";
-                cout << "\n\t\t\t  [4] Fare";
-                cout << "\n\t\t\t  [5] Add Passengers";
-                cout << "\n\t\t\t  [6] Remove Passengers";
-                cout << "\n\t\t\t  [7] Go Back";
-                cout << "\n\n\t\t\t  Your Choice: ";
+                bool isEdit = true;
+                while(isEdit){
 
-                int choice;
-                cin >> choice;
+                    cout << "\n\t\t\t  Select the detail you want to edit:";
+                    cout << "\n\t\t\t  [1] Route";
+                    cout << "\n\t\t\t  [2] Bus Type";
+                    cout << "\n\t\t\t  [3] Departure Time";
+                    cout << "\n\t\t\t  [4] Fare";
+                    cout << "\n\t\t\t  [5] Add Passengers";
+                    cout << "\n\t\t\t  [6] Remove Passengers";
+                    cout << "\n\t\t\t  [7] Go Back";
+                    cout << "\n\n\t\t\t  Your Choice: ";
 
-                cin.ignore(); // Clear the input buffer
-                bool ch = false;
-                switch (choice) {
-                    case 1:
+                    string choice;
+                    cin >> choice;
+
+                    cin.ignore(); // Clear the input buffer
+
+                    if(choice == "1") {
                         cout << "\n\t\t\t  Enter new route: ";
                         getline(cin, busToEdit->route);
                         cout << "\n\t\t\t  Route updated successfully!" << endl;
                         break;
-                    case 2:
+                    }
+                    else if(choice == "2"){
+                        bool btypeChoice = false;
                         do {
                             cout << "\n\t\t\t  Bus Type [1] Regular [2] Air-conditioned: ";
                             cin >> busTypeChoice;
 
                             if (busTypeChoice == "1") {
-                                ch = true;
                                 busToEdit->busType = "Regular";
-                                cout << "\t\t\t  Bus type updated successfully!" << endl;
+                                cout << "\n\t\t\t  Bus type updated successfully!" << endl;
+                                btypeChoice = true;
+                                isEdit = false;
                             }
                             else if (busTypeChoice == "2") {
-                                ch = true;
                                 busToEdit->busType = "Air-conditioned";
-                                cout << "\t\t\t  Bus type updated successfully!" << endl;
+                                cout << "\n\t\t\t  Bus type updated successfully!" << endl;
+                                btypeChoice = true;
+                                isEdit = false;
                             }
                             else {
-                                cout << "\t\t\t  --------------------------------";
                                 cout << "\n\t\t\t  Invalid Input! Please Try Again!" << endl;
                                 cin.clear();
                                 cin.ignore();
                             }
-                        } while (!choice);
-                        break;
-                    case 3:
+                        } while (!btypeChoice);
+                    }
+                    else if(choice == "3"){
                         cout << "\n\t\t\t  Enter new Departure Time: ";
-                        cin >> busToEdit->departure;
+                        getline(cin, busToEdit->departure);
                         cout << "\n\t\t\t  Departure Time updated successfully!" << endl;
                         break;
-                    case 4:
+                    }
+                    else if(choice == "4"){
                         cout << "\n\t\t\t  Enter new fare: ";
                         cin >> busToEdit->fare;
                         cout << "\n\t\t\t  Fare updated successfully!" << endl;
                         break;
-                    case 5:
+                    }
+                    else if(choice == "5"){
                         cout << "\n\t\t\t  Add how many passengers on board: ";
                         while(!(cin >> temp)){ //error-handler
                             cout << "\n\t\t\t  Invalid Input!" << endl << endl;
@@ -399,11 +440,12 @@ public:
                             cin.clear();
                             while(cin.get() != '\n');
                         }
+
                         if (temp > 0 && (busToEdit->passengerOnBoard + temp) <= MAX_SIZE) {
-                        busToEdit->passengerOnBoard += temp;
-                        cout << "\n\t\t\t  Added " << temp << " passengers on board" << endl;
-                        cout << "\t\t\t  Current passengers on board: " << busToEdit->passengerOnBoard << endl;
-                        temp = 0;
+                            busToEdit->passengerOnBoard += temp;
+                            cout << "\n\t\t\t  Added " << temp << " passengers on board" << endl;
+                            cout << "\n\t\t\t  Current passengers on board: " << busToEdit->passengerOnBoard << endl;
+                            temp = 0;
                         }
                         else if ((busToEdit->passengerOnBoard + temp) > MAX_SIZE) {
                             cout << "\n\t\t\t  Cannot add passengers because the bus has reached its maximum capacity." << endl;
@@ -412,7 +454,8 @@ public:
                             cout << "\t\t\t  Invalid input!" << endl;
                         }
                         break;
-                    case 6:
+                    }
+                    else if(choice == "6"){
                         cout << "\n\t\t\t  Remove how many passengers on board: ";
                         while(!(cin >> temp)){ //error-handler
                             cout << "\n\t\t\t  Invalid Input!" << endl << endl;
@@ -423,20 +466,23 @@ public:
                         if ((busToEdit->passengerOnBoard - temp) > 0) {
                             busToEdit->passengerOnBoard -= temp;
                             cout << "\n\t\t\t  Removed " << temp << " passengers on board" << endl;
-                            cout << "\t\t\t  Current passengers on board: " << busToEdit->passengerOnBoard << endl;
+                            cout << "\n\t\t\t  Current passengers on board: " << busToEdit->passengerOnBoard << endl;
                             temp = 0;
                         }
                         else if ((busToEdit->passengerOnBoard - temp) < 0) {
-                        cout << "\n\t\t\t  Cannot remove passengers below the amount of passengers on board." << endl;
-                        } else {
+                            cout << "\n\t\t\t  Cannot remove passengers below the amount of passengers on board." << endl;
+                        }
+                        else {
                             cout << "\n\t\t\t  Cannot remove passengers in an empty bus." << endl;
                         }
                         break;
-                    case 7:
+                    }
+                    else if(choice == "7"){
                         break;
-                    default:
-                        cout << "\n\t\t\t  Invalid choice!" << endl;
-                        break;
+                    }
+                    else{
+                        cout << "\n\t\t\t  Invalid Input! Please Try Again!" << endl;
+                    }
                 }
             }
             else {
@@ -449,7 +495,7 @@ public:
 
         auto endTime = chrono::steady_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        cout << "\t\t\t  Execution Time: " << duration.count() << " ms" << endl;
+        cout << "\n\t\t\t  Execution Time: " << duration.count() << " ms" << endl;
         cout << "\n\t\t\t  Press any key to go back: ";
         cin.ignore();
         cin.get();
@@ -507,8 +553,8 @@ public:
 
         auto endTime = chrono::steady_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        cout << "\t\t\tExecution Time: " << duration.count() << " ms" << endl;
-        cout << "\n\t\t\tPress any key to go back: ";
+        cout << "\t\t\t    Execution Time: " << duration.count() << " ms" << endl;
+        cout << "\n\t\t\t    Press any key to go back: ";
         cin.ignore();
         cin.get();
     }
@@ -542,7 +588,7 @@ public:
         specificBusText();
 
         int parkingNum;
-        cout << "\t  Enter the parking slot number (1-8) to edit a bus: ";
+        cout << "\t  Enter the parking slot number (1-8) to display the bus: ";
         while(!(cin >> parkingNum)){ //error-handler
             cout << "\n\t  Invalid Input!" << endl << endl;
             cout << "\t  Please input again: ";
@@ -627,7 +673,7 @@ public:
                 cout << "\n\t\t\t Expected Departure Time: " << curr->departure;
                 cout << "\n\t\t\t Fare: Php " << curr->fare;
                 cout << "\n\t\t\t Time of Arrival: " << curr->arrivalTime;
-                cout << "\n\t  Passengers on Board: " << curr->passengerOnBoard;
+                cout << "\n\t\t\t Passengers on Board: " << curr->passengerOnBoard;
                 cout << "\n\t\t\t =====================================================================" << endl;
 
                 busNo++;
@@ -810,68 +856,95 @@ void logoHeader(){
 
 void mainMenu(){
     cout << "\n\t\t\t  ====================================================================\n";
-    cout << "\t\t\t  | [1] Add Bus                                [5] Edit Bus          |\n";
-    cout << "\t\t\t  | [2] Remove Bus                             [6] Sort Buses        |\n";
-    cout << "\t\t\t  | [3] Display Specific Bus Information       [7] History           |\n";
-    cout << "\t\t\t  | [4] Display All Buses Information          [8] Exit              |\n";
+    cout << "\t\t\t  | [1] Add Bus                                [6] Edit Bus          |\n";
+    cout << "\t\t\t  | [2] Remove Bus                             [7] Sort Buses        |\n";
+    cout << "\t\t\t  | [3] Depart Bus                             [8] History           |\n";
+    cout << "\t\t\t  | [4] Display Specific Bus Information       [9] Exit              |\n";
+    cout << "\t\t\t  | [5] Display All Buses Information                                |\n";
     cout << "\t\t\t  ====================================================================\n";
 }
 
-void color_coding(Bus* bus) {
-    double occupancyPercentage = static_cast<double>(bus->passengerOnBoard) / MAX_SIZE;
+void color_coding(Bus* head) {
+    Bus* curr = head;
+    double occupancyPercentage = static_cast<double>(curr->passengerOnBoard) / MAX_SIZE;
 
     if (occupancyPercentage == 1.0) {
-        bus->name = ANSI_RED + bus->name + ANSI_RESET;
-        bus->route = ANSI_RED + bus->route + ANSI_RESET;
-        cout << "RED" << endl;
-    } else if (occupancyPercentage >= 0.5) {
-        bus->name = ANSI_ORANGE + bus->name + ANSI_RESET;
-        bus->route = ANSI_ORANGE + bus->route + ANSI_RESET;
-        cout << "orange" << endl;
-    } else {
-        bus->name = ANSI_GREEN + bus->name + ANSI_RESET;
-        bus->route = ANSI_GREEN + bus->route + ANSI_RESET;
-        cout << "green" << endl;
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+        WORD currentColor = consoleInfo.wAttributes;
+        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+
+        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
+        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
+        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
+
+        // Reset console color to default
+        SetConsoleTextAttribute(hConsole, currentColor);
+        cout << setw(8) << "|";
+    }
+    else if (occupancyPercentage >= 0.5) {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+        WORD currentColor = consoleInfo.wAttributes;
+        SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
+
+        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
+        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
+        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
+
+        // Reset console color to default
+        SetConsoleTextAttribute(hConsole, currentColor);
+        cout << setw(8) << "|";
+    }
+    else {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+        WORD currentColor = consoleInfo.wAttributes;
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+
+        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
+        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
+        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
+
+        // Reset console color to default
+        SetConsoleTextAttribute(hConsole, currentColor);
+        cout << setw(8) << "|";
     }
 }
 
-void updatePassengerCount(Bus* bus, int newPassengerCount) {
-    bus->passengerOnBoard = newPassengerCount;
-    color_coding(bus);
-}
+
 
 void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
-    for (int i = 0; i < numParkingSlots; i++) {
-            if (parkingLot[i].bus != nullptr) {
-                color_coding(parkingLot[i].bus);
-                updatePassengerCount(parkingLot[i].bus, parkingLot[i].bus->passengerOnBoard);
-                cout << "TESST" << endl;
-            }
-        }
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+         "<< endl;
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |    Parking No.1    |   Parking No. 2    |   Parking No. 3    |   Parking No. 4    |         "<< endl;
     if (parkingLot[0].bus != nullptr) {
-        cout << "\t\t  |" << setw(14) << parkingLot[0].bus->name << setw(7) << "|";
+        cout << "\t\t  |";
+        color_coding(parkingLot[0].bus);
+        //cout << "\t\t  |" << setw(14) << parkingLot[0].bus->name << setw(7) << "|";
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[1].bus != nullptr) {
-        cout << setw(14) << parkingLot[1].bus->name << setw(7) << "|";
+        color_coding(parkingLot[1].bus);
+        // cout << setw(14) << parkingLot[1].bus->name << setw(7) << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[2].bus != nullptr) {
-        cout << setw(14) << parkingLot[2].bus->name << setw(7) << "|";
+        color_coding(parkingLot[2].bus);
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[3].bus != nullptr) {
-        cout << setw(14) << parkingLot[3].bus->name << setw(7) << "|";
+        color_coding(parkingLot[3].bus);
     } else {
         cout << "                    |";
     }
@@ -914,25 +987,26 @@ void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |   Parking No. 5    |   Parking No. 6    |    Parking No. 7   |   Parking No. 8    |         "<< endl;
     if (parkingLot[4].bus != nullptr) {
-        cout << "\t\t  |" << setw(14) << parkingLot[4].bus->name << setw(7) << "|";
+        cout << "\t\t  |";
+        color_coding(parkingLot[4].bus);
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[5].bus != nullptr) {
-        cout << setw(14) << parkingLot[5].bus->name << setw(7) << "|";
+        color_coding(parkingLot[5].bus);
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[6].bus != nullptr) {
-        cout << setw(14) << parkingLot[6].bus->name << setw(7) << "|";
+        color_coding(parkingLot[6].bus);
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[7].bus != nullptr) {
-        cout << setw(14) << parkingLot[7].bus->name << setw(7) << "|";
+        color_coding(parkingLot[7].bus);
     } else {
         cout << "                    |";
     }
@@ -967,9 +1041,9 @@ void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
     cout << "\t\t  |                    |                    |                    |                    |         " << endl;
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+         " << endl;
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+" << endl;
-    cout << "\t\t  |                                 BUS CAPACITY                                      |" << endl;
+    cout << "\t\t  |                              PASSENGERS ON BOARD                                  |" << endl;
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+" << endl;
-    cout << "\t\t  |       FULL = RED      |        HALF-FULL = ORANGE        |       LOW = GREEN      |" << endl;
+    cout << "\t\t  |       FULL = " << ANSI_RED << "RED" << ANSI_RESET << "      |        HALF-FULL = "<< ANSI_ORANGE << "ORANGE"<< ANSI_RESET <<"        |       LOW = "<< ANSI_GREEN << "GREEN"<< ANSI_RESET << "      |" << endl;
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+" << endl;
 }
 
@@ -1005,15 +1079,18 @@ int main()
             mT.removeBus(&head, totalBuses, parkingLot, &historyList);
         }
         else if (choice == "3") {
-            mT.specificBus(parkingLot, numParkingSlots);
+            mT.departBus(numParkingSlots);
         }
         else if (choice == "4") {
-            mT.displayAll(head, historyList);
+            mT.specificBus(parkingLot, numParkingSlots);
         }
         else if (choice == "5") {
-            mT.editBus(head, parkingLot, numParkingSlots, totalBuses);
+            mT.displayAll(head, historyList);
         }
         else if (choice == "6") {
+            mT.editBus(head, parkingLot, numParkingSlots, totalBuses);
+        }
+        else if (choice == "7") {
             auto startTime = chrono::steady_clock::now();
             mT.mergeSort(&head);
             auto endTime = chrono::steady_clock::now();
@@ -1023,10 +1100,10 @@ int main()
             Sleep(1000);
             mT.displaySortedBuses(head); // Display the sorted buses
         }
-        else if (choice == "7") {
+        else if (choice == "8") {
             mT.history(historyList);
         }
-        else if (choice == "8") {
+        else if (choice == "9") {
             isMain = false;
         }
         else {
