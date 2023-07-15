@@ -183,7 +183,7 @@ public:
         cin.get();
     }
 
-    void removeBusText(){
+    void departBusText() {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
         // Get the current console color
@@ -193,26 +193,27 @@ public:
 
         // Set color to blue
         SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-
-        cout << "\t\t           _____                                          ____              \n"
-                "\t\t          |  __ \\                                        |  _ \\             \n"
-                "\t\t          | |__) |  ___  _ __ ___    ___  __   __  ___   | |_) | _   _  ___ \n"
-                "\t\t          |  _  /  / _ \\| '_ ` _ \\  / _ \\ \\ \\ / /  / _ \\ |  _ < | | | |/ __|\n"
-                "\t\t          | | \\ \\ |  __/| | | | | || (_) | \\ V / |   __/ | |_) || |_| |\\__ \\\n"
-                "\t\t          |_|  \\_\\ \\___||_| |_| |_| \\___/   \\_/    \\___| |____/  \\__,_||___/\n";
-
+        cout << "\t\t\t\t    _____                             _     ____              " << endl;
+        cout << "\t\t\t\t   |  __ \\                           | |   |  _ \\             " << endl;
+        cout << "\t\t\t\t   | |  | |  ___  _ __    __ _  _ __ | |_  | |_) | _   _  ___ " << endl;
+        cout << "\t\t\t\t   | |  | | / _ \\| '_ \\  / _` || '__|| __| |  _ < | | | |/ __|" << endl;
+        cout << "\t\t\t\t   | |__| ||  __/| |_) || (_| || |   | |_  | |_) || |_| |\\__ \\" << endl;
+        cout << "\t\t\t\t   |_____/  \\___|| .__/  \\__,_||_|    \\__| |____/  \\__,_||___/" << endl;
+        cout << "\t\t\t\t                 | |                                          " << endl;
+        cout << "\t\t\t\t                 |_|                                          " << endl;
         SetConsoleTextAttribute(hConsole, currentColor);
-        cout << "\n\t\t\t ====================================================================\n";
+
+        cout << "\n\t\t\t  ====================================================================\n";
     }
 
-    void removeBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList){
+    void departBus(Bus** head, int& totalBuses, ParkingLot* parkingLot, Bus** historyList){
         int parkingNum;
 
         auto startTime = chrono::steady_clock::now();
         system("CLS");
-        removeBusText();
+        departBusText();
 
-        cout << "\t\t\t Enter the parking slot number (1-8) to remove the bus: ";
+        cout << "\t\t\t Enter the parking slot number (1-8) to depart the bus: ";
         while(!(cin >> parkingNum)){ //error-handler
             cout << "\n\t\t\t Invalid Input!" << endl << endl;
             cout << "\t\t\t Please input again: ";
@@ -263,44 +264,6 @@ public:
         auto duration = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
         cout << "\n\t\t\t Execution Time: " << duration.count() << " ms" << endl;
         cout << "\t\t\t Press any key to go back: ";
-        cin.ignore();
-        cin.get();
-    }
-
-    void departBusDisplay() {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-        // Get the current console color
-        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-        WORD currentColor = consoleInfo.wAttributes;
-
-        // Set color to blue
-        SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-        cout << "\t\t\t\t    _____                             _     ____              " << endl;
-        cout << "\t\t\t\t   |  __ \\                           | |   |  _ \\             " << endl;
-        cout << "\t\t\t\t   | |  | |  ___  _ __    __ _  _ __ | |_  | |_) | _   _  ___ " << endl;
-        cout << "\t\t\t\t   | |  | | / _ \\| '_ \\  / _` || '__|| __| |  _ < | | | |/ __|" << endl;
-        cout << "\t\t\t\t   | |__| ||  __/| |_) || (_| || |   | |_  | |_) || |_| |\\__ \\" << endl;
-        cout << "\t\t\t\t   |_____/  \\___|| .__/  \\__,_||_|    \\__| |____/  \\__,_||___/" << endl;
-        cout << "\t\t\t\t                 | |                                          " << endl;
-        cout << "\t\t\t\t                 |_|                                          " << endl;
-        SetConsoleTextAttribute(hConsole, currentColor);
-
-        cout << "\n\t\t\t  ====================================================================\n";
-    }
-
-    void mainTerminal::departBus(int parkingNum) {
-        auto startTime = std::chrono::steady_clock::now();
-        system("CLS");
-        departBusDisplay();
-
-        // CODE
-
-        auto endTime = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-        cout << "\t\t\tExecution Time: " << duration.count() << " ms" << endl;
-        cout << "\n\t\t\tPress any key to go back: ";
         cin.ignore();
         cin.get();
     }
@@ -865,11 +828,10 @@ void logoHeader(){
 
 void mainMenu(){
     cout << "\n\t\t\t  ====================================================================\n";
-    cout << "\t\t\t  | [1] Add Bus                                [6] Edit Bus          |\n";
-    cout << "\t\t\t  | [2] Remove Bus                             [7] Sort Buses        |\n";
-    cout << "\t\t\t  | [3] Depart Bus                             [8] History           |\n";
-    cout << "\t\t\t  | [4] Display Specific Bus Information       [9] Exit              |\n";
-    cout << "\t\t\t  | [5] Display All Buses Information                                |\n";
+    cout << "\t\t\t  | [1] Add Bus                                [5] Edit Bus          |\n";
+    cout << "\t\t\t  | [2] Depart Bus                             [6] Sort Buses        |\n";
+    cout << "\t\t\t  | [3] Display Specific Bus Information       [7] History           |\n";
+    cout << "\t\t\t  | [4] Display All Buses Information          [8] Exit              |\n";
     cout << "\t\t\t  ====================================================================\n";
 }
 
@@ -1126,21 +1088,18 @@ int main()
             mT.addBus(&head, totalBuses, parkingLot);
         }
         else if (choice == "2") {
-            mT.removeBus(&head, totalBuses, parkingLot, &historyList);
+            mT.departBus(&head, totalBuses, parkingLot, &historyList);
         }
         else if (choice == "3") {
-            mT.departBus(numParkingSlots);
-        }
-        else if (choice == "4") {
             mT.specificBus(parkingLot, numParkingSlots);
         }
-        else if (choice == "5") {
+        else if (choice == "4") {
             mT.displayAll(head, historyList);
         }
-        else if (choice == "6") {
+        else if (choice == "5") {
             mT.editBus(head, parkingLot, numParkingSlots, totalBuses);
         }
-        else if (choice == "7") {
+        else if (choice == "6") {
             auto startTime = chrono::steady_clock::now();
             mT.mergeSort(&head);
             auto endTime = chrono::steady_clock::now();
@@ -1150,10 +1109,10 @@ int main()
             Sleep(1000);
             mT.displaySortedBuses(head); // Display the sorted buses
         }
-        else if (choice == "8") {
+        else if (choice == "7") {
             mT.history(historyList);
         }
-        else if (choice == "9") {
+        else if (choice == "8") {
             isMain = false;
         }
         else {
