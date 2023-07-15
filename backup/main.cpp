@@ -883,10 +883,12 @@ void color_coding(Bus* head) {
     WORD defaultColor = consoleInfo.wAttributes;
 
     
-    if (occupancyPercentage == 1.0 || occupancyPercentage >= 0.5) {
-        SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
+    if (occupancyPercentage == 1.0) {
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    } else if (occupancyPercentage >= 0.5) {
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
     } else {
-        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
     }
 
 }
