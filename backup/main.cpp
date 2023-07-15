@@ -877,83 +877,82 @@ void color_coding(Bus* head) {
     Bus* curr = head;
     double occupancyPercentage = static_cast<double>(curr->passengerOnBoard) / MAX_SIZE;
 
-    if (occupancyPercentage == 1.0) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-        WORD currentColor = consoleInfo.wAttributes;
-        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD defaultColor = consoleInfo.wAttributes;
 
-        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
-        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
-        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
-
-        // Reset console color to default
-        SetConsoleTextAttribute(hConsole, currentColor);
-        cout << setw(8) << "|";
-    }
-    else if (occupancyPercentage >= 0.5) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-        WORD currentColor = consoleInfo.wAttributes;
+    
+    if (occupancyPercentage == 1.0 || occupancyPercentage >= 0.5) {
         SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
-
-        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
-        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
-        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
-
-        // Reset console color to default
-        SetConsoleTextAttribute(hConsole, currentColor);
-        cout << setw(8) << "|";
-    }
-    else {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-        GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-        WORD currentColor = consoleInfo.wAttributes;
+    } else {
         SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+    }
 
-        int padding = (13 - curr->name.length()) / 2;  // Calculate padding for center alignment
-        int extraPadding = (13 - curr->name.length()) % 2;  // Calculate extra padding for odd name lengths
-        cout << setw(1) << setw(padding + extraPadding) << "" << curr->name << setw(padding) << "";
+}
 
-        // Reset console color to default
-        SetConsoleTextAttribute(hConsole, currentColor);
-        cout << setw(8) << "|";
+void centerBusDisplay(const string& text, int width) {
+
+    if (text.length() > 12) {
+        int leftPadding = (width - 12) / 2;
+        int rightPadding = width - 12 - leftPadding;
+        cout << string(leftPadding, ' ') << text.substr(0, 12) << "... ";
+    } else {
+        int leftPadding = (width - text.length()) / 2;
+        int rightPadding = width - text.length() - leftPadding;
+        cout << string(leftPadding, ' ') << text << string(rightPadding, ' ');
     }
 }
 
 
-
 void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD defaultColor = consoleInfo.wAttributes;
+
+    const int parkingLotWidth = 20;
+
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+         "<< endl;
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |    Parking No.1    |   Parking No. 2    |   Parking No. 3    |   Parking No. 4    |         "<< endl;
+
+
     if (parkingLot[0].bus != nullptr) {
         cout << "\t\t  |";
         color_coding(parkingLot[0].bus);
-        //cout << "\t\t  |" << setw(14) << parkingLot[0].bus->name << setw(7) << "|";
+        centerBusDisplay(parkingLot[0].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[1].bus != nullptr) {
         color_coding(parkingLot[1].bus);
-        // cout << setw(14) << parkingLot[1].bus->name << setw(7) << "|";
+        centerBusDisplay(parkingLot[1].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[2].bus != nullptr) {
         color_coding(parkingLot[2].bus);
+        centerBusDisplay(parkingLot[2].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[3].bus != nullptr) {
         color_coding(parkingLot[3].bus);
+        centerBusDisplay(parkingLot[3].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
@@ -961,25 +960,38 @@ void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
     cout << endl;
 
     if (parkingLot[0].bus != nullptr) {
-        cout << "\t\t  |" << setw(13) << parkingLot[0].bus->route << setw(8) << "|";
+        cout << "\t\t  |";
+        color_coding(parkingLot[0].bus);
+        centerBusDisplay(parkingLot[0].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[1].bus != nullptr) {
-        cout << setw(13) << parkingLot[1].bus->route << setw(8) << "|";
+        color_coding(parkingLot[1].bus);
+        centerBusDisplay(parkingLot[1].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[2].bus != nullptr) {
-        cout << setw(13) << parkingLot[2].bus->route << setw(8) << "|";
+        color_coding(parkingLot[2].bus);
+        centerBusDisplay(parkingLot[2].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[3].bus != nullptr) {
-        cout << setw(13) << parkingLot[3].bus->route << setw(8) << "|";
+        color_coding(parkingLot[3].bus);
+        centerBusDisplay(parkingLot[3].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
@@ -995,55 +1007,83 @@ void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |                    |                    |                    |                    |         "<< endl;
     cout << "\t\t  |   Parking No. 5    |   Parking No. 6    |    Parking No. 7   |   Parking No. 8    |         "<< endl;
+  
     if (parkingLot[4].bus != nullptr) {
         cout << "\t\t  |";
         color_coding(parkingLot[4].bus);
+        centerBusDisplay(parkingLot[4].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[5].bus != nullptr) {
         color_coding(parkingLot[5].bus);
+        centerBusDisplay(parkingLot[5].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[6].bus != nullptr) {
         color_coding(parkingLot[6].bus);
+        centerBusDisplay(parkingLot[6].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[7].bus != nullptr) {
         color_coding(parkingLot[7].bus);
+        centerBusDisplay(parkingLot[7].bus->name, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
+
     cout << endl;
 
     if (parkingLot[4].bus != nullptr) {
-        cout << "\t\t  |" << setw(13) << parkingLot[4].bus->route << setw(8) << "|";
+        cout << "\t\t  |";
+        color_coding(parkingLot[4].bus);
+        centerBusDisplay(parkingLot[4].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "\t\t  |                    |";
     }
 
     if (parkingLot[5].bus != nullptr) {
-        cout << setw(13) << parkingLot[5].bus->route << setw(8) << "|";
+        color_coding(parkingLot[5].bus);
+        centerBusDisplay(parkingLot[5].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[6].bus != nullptr) {
-        cout << setw(13) << parkingLot[6].bus->route << setw(8) << "|";
+        color_coding(parkingLot[6].bus);
+        centerBusDisplay(parkingLot[6].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
 
     if (parkingLot[7].bus != nullptr) {
-        cout << setw(13) << parkingLot[7].bus->route << setw(8) << "|";
+        color_coding(parkingLot[7].bus);
+        centerBusDisplay(parkingLot[7].bus->route, parkingLotWidth);
+        SetConsoleTextAttribute(hConsole, defaultColor);
+        cout << "|";
     } else {
         cout << "                    |";
     }
+
     cout << endl;
     cout << "\t\t  |                    |                    |                    |                    |         " << endl;
     cout << "\t\t  |                    |                    |                    |                    |         " << endl;
@@ -1055,7 +1095,6 @@ void busDisplay(ParkingLot* parkingLot, int numParkingSlots) {
     cout << "\t\t  |       FULL = " << ANSI_RED << "RED" << ANSI_RESET << "      |        HALF-FULL = "<< ANSI_ORANGE << "ORANGE"<< ANSI_RESET <<"        |       LOW = "<< ANSI_GREEN << "GREEN"<< ANSI_RESET << "      |" << endl;
     cout << "\t\t  +--------------------+--------------------+--------------------+--------------------+" << endl;
 }
-
 
 int main()
 {
